@@ -56,6 +56,7 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "sakura", "-c", "90", "-r", "30", NULL };
+static const char *stcmd[]    = { "st", NULL };
 static const char *wwwcmd[]   = { "chromium", NULL };
 static const char *mutecmd[]  = { "amixer", "set", "Master", "toggle", NULL };
 static const char *volupcmd[] = { "amixer", "set", "Master", "5%+", NULL };
@@ -103,16 +104,17 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	/* custom */
-	{ False,                       XF86XK_HomePage,       spawn,          {.v = wwwcmd } },
-	{ False,                       XF86XK_AudioPlay,      spawn,          {.v = mpctogglecmd } },
-	{ False,                       XF86XK_AudioStop,      spawn,          {.v = mpcstopcmd } },
-	{ False,                       XF86XK_AudioPrev,      spawn,          {.v = mpcprevcmd } },
-	{ False,                       XF86XK_AudioNext,      spawn,          {.v = mpcnextcmd } },
-	{ MODKEY,                      XK_KP_Add,             spawn,          {.v = mpcvolupcmd } },
-	{ MODKEY,                      XK_KP_Subtract,        spawn,          {.v = mpcvoldowncmd  } },
-	{ False,                       XF86XK_AudioMute,        spawn,          {.v = mutecmd  } },
-	{ False,                       XF86XK_AudioRaiseVolume, spawn,          {.v = volupcmd  } },
-	{ False,                       XF86XK_AudioLowerVolume, spawn,          {.v = voldncmd  } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = stcmd } },
+	{ False,                        XF86XK_HomePage,           spawn,          {.v = wwwcmd } },
+	{ False,                        XF86XK_AudioPlay,          spawn,          {.v = mpctogglecmd } },
+	{ False,                        XF86XK_AudioStop,          spawn,          {.v = mpcstopcmd } },
+	{ False,                        XF86XK_AudioPrev,          spawn,          {.v = mpcprevcmd } },
+	{ False,                        XF86XK_AudioNext,          spawn,          {.v = mpcnextcmd } },
+	{ MODKEY,                       XK_KP_Add,                 spawn,          {.v = mpcvolupcmd } },
+	{ MODKEY,                       XK_KP_Subtract,            spawn,          {.v = mpcvoldowncmd  } },
+	{ False,                        XF86XK_AudioMute,          spawn,          {.v = mutecmd  } },
+	{ False,                        XF86XK_AudioRaiseVolume,   spawn,          {.v = volupcmd  } },
+	{ False,                        XF86XK_AudioLowerVolume,   spawn,          {.v = voldncmd  } },
 };
 
 /* button definitions */
