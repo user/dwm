@@ -1,20 +1,20 @@
 diff --git a/config.def.h b/config.def.h
-index 8fd5d4a..b1c5669 100644
+index e1e2c23..ec1c57c 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -9,6 +9,7 @@ static const char selbordercolor[]  = "#005577";
- static const char selbgcolor[]      = "#005577";
- static const char selfgcolor[]      = "#eeeeee";
+@@ -16,6 +16,7 @@ static const char colors[NUMCOLORS][ColLast][9] = {
+ };
+ static const char font[]            = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
  static const unsigned int borderpx  = 1;        /* border pixel of windows */
-+static const unsigned int gappx     = 6;        /* gap pixel between windows */
++static const unsigned int gappx     = 2;        /* gap pixel between windows */
  static const unsigned int snap      = 32;       /* snap pixel */
  static const Bool showbar           = True;     /* False means no bar */
  static const Bool topbar            = True;     /* False means bottom bar */
 diff --git a/dwm.c b/dwm.c
-index 8b67cea..0e499ca 100644
+index 4a28389..9fbaace 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -286,6 +286,8 @@ static Display *dpy;
+@@ -290,6 +290,8 @@ static Display *dpy;
  static DC dc;
  static Monitor *mons = NULL, *selmon = NULL;
  static Window root;
@@ -23,7 +23,7 @@ index 8b67cea..0e499ca 100644
  
  /* configuration, allows nested code to access above variables */
  #include "config.h"
-@@ -1363,11 +1365,17 @@ resize(Client *c, int x, int y, int w, int h, Bool interact) {
+@@ -1434,11 +1436,17 @@ resize(Client *c, int x, int y, int w, int h, Bool interact) {
  void
  resizeclient(Client *c, int x, int y, int w, int h) {
  	XWindowChanges wc;
