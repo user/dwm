@@ -2,16 +2,20 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-#define NUMCOLORS         4             // need at least 3
-static const char colors[NUMCOLORS][ColLast][8] = {
-   // border   foreground  background
-   { "#222222", "#dcdcdc", "#3a3a3a" },  // 0 = normal
-   { "#aaaaaa", "#bcbcbc", "#6d6d6d" },  // 1 = selected
-   { "#0066ff", "#0066ff", "#ffffff" },  // 2 = urgent/warning
-   { "#ff0000", "#ffffff", "#ff0000" },  // 3 = error
-   // add more here
+#define NUMCOLORS 9
+static const char colors[NUMCOLORS][ColLast][9] = {
+	/*  border   foreground  background  */
+	{ "#202020", "#a9a9a9", "#333333" },  /* x01 = darkgray  */
+	{ "#a9a9a9", "#d3d3d3", "#333333" },  /* x02 = lightgray */
+	{ "#202020", "#ff8c00", "#333333" },  /* x03 = orange    */
+	{ "#202020", "#ff0000", "#333333" },  /* x04 = red       */
+	{ "#202020", "#4cbb17", "#333333" },  /* x05 = green     */
+	{ "#202020", "#f4ca16", "#333333" },  /* x06 = yellow    */
+	{ "#202020", "#318ce7", "#333333" },  /* x07 = blue      */
+	{ "#202020", "#cc00cc", "#333333" },  /* x08 = magenta   */
+	{ "#202020", "#00b7eb", "#333333" },  /* x09 = cyan      */
 };
-static const char font[]            = "-*-ohsnap-medium-*-*-*-14-*-*-*-*-*-*-*";
+static const char font[]            = "-*-ohsnap-medium-r-*-*-14-*-*-*-*-*-*-*";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 2;        /* gap pixel between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -23,8 +27,8 @@ static const char *tags[] = { "main", "web", "dev", "media", "temp" };
 
 static const Rule rules[] = {
 	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
+	 * WM_CLASS(STRING) = instance, class
+	 * WM_NAME(STRING) = title
 	 */
 	/* class          instance    title       tags mask     isfloating   monitor */
 	{ "Chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
@@ -33,6 +37,7 @@ static const Rule rules[] = {
 	{ "Pidgin",       NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Sonata",       NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Transmission", NULL,       NULL,       1 << 3,       True,        -1 },
+	{ "Xgrabcolor",   NULL,       NULL,       0,            True,        -1 },
 };
 
 /* layout(s) */
