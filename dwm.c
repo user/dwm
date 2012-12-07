@@ -290,6 +290,8 @@ static Display *dpy;
 static DC dc;
 static Monitor *mons = NULL, *selmon = NULL;
 static Window root;
+static int globalborder;
+static int globalborder;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -1435,10 +1437,15 @@ void
 resizeclient(Client *c, int x, int y, int w, int h) {
 	XWindowChanges wc;
 
-	c->oldx = c->x; c->x = wc.x = x;
-	c->oldy = c->y; c->y = wc.y = y;
-	c->oldw = c->w; c->w = wc.width = w;
-	c->oldh = c->h; c->h = wc.height = h;
+	if(c->isfloating || selmon->lt[selmon->sellt]->arrange == NULL) { globalborder = 0 ; }
+	else {
+		if (selmon->lt[selmon->sellt]->arrange == monocle) { globalborder = 0 - borderpx ; }
+		else { globalborder =  gappx ; }
+	}
+	c->oldx = c->x; c->x = wc.x = x + globalborder ;
+	c->oldy = c->y; c->y = wc.y = y + globalborder ;
+	c->oldw = c->w; c->w = wc.width = w - 2 * globalborder ;
+	c->oldh = c->h; c->h = wc.height = h - 2 * globalborder ;
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);

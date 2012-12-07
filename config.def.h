@@ -16,6 +16,7 @@ static const char colors[NUMCOLORS][ColLast][9] = {
 };
 static const char font[]            = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int gappx     = 2;        /* gap pixel between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
