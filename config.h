@@ -5,15 +5,15 @@
 #define NUMCOLORS 9
 static const char colors[NUMCOLORS][ColLast][9] = {
 	/*  border   foreground  background  */
-	{ "#202020", "#a9a9a9", "#333333" },  /* x01 = darkgray  */
-	{ "#a9a9a9", "#d3d3d3", "#333333" },  /* x02 = lightgray */
-	{ "#202020", "#ff8c00", "#333333" },  /* x03 = orange    */
-	{ "#202020", "#ff0000", "#333333" },  /* x04 = red       */
-	{ "#202020", "#4cbb17", "#333333" },  /* x05 = green     */
-	{ "#202020", "#f4ca16", "#333333" },  /* x06 = yellow    */
-	{ "#202020", "#318ce7", "#333333" },  /* x07 = blue      */
-	{ "#202020", "#cc00cc", "#333333" },  /* x08 = magenta   */
-	{ "#202020", "#00b7eb", "#333333" },  /* x09 = cyan      */
+	{ "#202020", "#a9a9a9", "#343434" },  /* x01 = darkgray  */
+	{ "#a9a9a9", "#d3d3d3", "#343434" },  /* x02 = lightgray */
+	{ "#202020", "#ff8c00", "#343434" },  /* x03 = orange    */
+	{ "#202020", "#ff0000", "#343434" },  /* x04 = red       */
+	{ "#202020", "#4cbb17", "#343434" },  /* x05 = green     */
+	{ "#202020", "#f4ca16", "#343434" },  /* x06 = yellow    */
+	{ "#202020", "#318ce7", "#343434" },  /* x07 = blue      */
+	{ "#202020", "#cc00cc", "#343434" },  /* x08 = magenta   */
+	{ "#202020", "#00b7eb", "#343434" },  /* x09 = cyan      */
 };
 static const char font[]            = "-*-ohsnap-medium-r-*-*-14-*-*-*-*-*-*-*";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
