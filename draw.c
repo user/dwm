@@ -1,8 +1,11 @@
 /* See LICENSE file for copyright and license details. */
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <X11/Xlib.h>
 
 #include "draw.h"
+#include "util.h"
 
 Draw *
 draw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h) {
@@ -36,80 +39,164 @@ draw_free(Draw *draw) {
 }
 
 Fnt *
-font_create(const char *fontname) {
-	Fnt *font = (Fnt *)calloc(1, sizeof(Fnt));
-	/* TODO: allocate actual font */
+draw_font_create(Draw *draw, const char *fontname) {
+	Fnt *font;
+	char *def, **missing;
+	int n;
+
+	if(!draw)
+		return NULL;
+	font = (Fnt *)calloc(1, sizeof(Fnt));
+	font->set = XCreateFontSet(draw->dpy, fontname, &missing, &n, &def);
+	if(missing) {
+		while(n--)
+			fprintf(stderr, "draw: missing fontset: %s\n", missing[n]);
+		XFreeStringList(missing);
+	}
+	if(font->set) {
+		XFontStruct **xfonts;
+		char **font_names;
+		XExtentsOfFontSet(font->set);
+		n = XFontsOfFontSet(font->set, &xfonts, &font_names);
+		while(n--) {
+			font->ascent = MAX(font->ascent, (*xfonts)->ascent);
+			font->descent = MAX(font->descent,(*xfonts)->descent);
+			xfonts++;
+		}
+	}
+	else {
+		if(!(font->xfont = XLoadQueryFont(draw->dpy, fontname))
+		&& !(font->xfont = XLoadQueryFont(draw->dpy, "fixed")))
+			die("error, cannot load font: '%s'\n", fontname);
+		font->ascent = font->xfont->ascent;
+		font->descent = font->xfont->descent;
+	}
+	font->h = font->ascent + font->descent;
 	return font;
 }
 
 void
-font_free(Fnt *font) {
-	if(!font)
+draw_font_free(Draw *draw, Fnt *font) {
+	if(!draw || !font)
 		return;
-	/* TODO: deallocate any font resources */
+	if(font->set)
+		XFreeFontSet(draw->dpy, font->set);
+	else
+		XFreeFont(draw->dpy, font->xfont);
 	free(font);
 }
 
 Col *
-col_create(const char *colname) {
+draw_col_create(Draw *draw, const char *colname) {
 	Col *col = (Col *)calloc(1, sizeof(Col));
-	/* TODO: allocate color */
+	Colormap cmap = DefaultColormap(draw->dpy, draw->screen);
+	XColor color;
+
+	if(!XAllocNamedColor(draw->dpy, cmap, colname, &color, &color))
+		die("error, cannot allocate color '%s'\n", colname);
+	col->rgb = color.pixel;
 	return col;
 }
 
 void
-col_free(Col *col) {
+draw_col_free(Draw *draw, Col *col) {
 	if(!col)
 		return;
-	/* TODO: deallocate any color resource */
 	free(col);
 }
 
 void
 draw_setfont(Draw *draw, Fnt *font) {
-	if(!draw || !font)
+	if(!draw)
 		return;
 	draw->font = font;
 }
 
 void
 draw_setfg(Draw *draw, Col *col) {
-	if(!draw || !col) 
+	if(!draw) 
 		return;
 	draw->fg = col;
 }
 
 void
 draw_setbg(Draw *draw, Col *col) {
-	if(!draw || !col)
+	if(!draw)
 		return;
 	draw->bg = col;
 }
 
 void
-draw_rect(Draw *draw, int x, int y, unsigned int w, unsigned int h) {
-	if(!draw)
+draw_rect(Draw *draw, int x, int y, unsigned int w, unsigned int h, Bool filled, Bool empty, Bool invert) {
+	int dx;
+
+	if(!draw || !draw->font || !draw->fg || !draw->bg)
 		return;
-	/* TODO: draw the rectangle */
+	XSetForeground(draw->dpy, draw->gc, invert ? draw->bg->rgb : draw->fg->rgb);
+	dx = (draw->font->ascent + draw->font->descent + 2) / 4;
+	if(filled)
+		XFillRectangle(draw->dpy, draw->drawable, draw->gc, x+1, y+1, dx+1, dx+1);
+	else if(empty)
+		XDrawRectangle(draw->dpy, draw->drawable, draw->gc, x+1, y+1, dx, dx);
 }
 
 void
-draw_text(Draw *draw, int x, int y, const char *text) {
-	if(!draw)
+draw_text(Draw *draw, int x, int y, unsigned int w, unsigned int h, const char *text, Bool invert) {
+	char buf[256];
+	int i, tx, ty, len, olen;
+	TextExtents tex;
+
+	if(!draw || !draw->fg || !draw->bg)
 		return;
-	/* TODO: draw the text */
+	XSetForeground(draw->dpy, draw->gc, invert ? draw->fg->rgb : draw->bg->rgb);
+	XFillRectangle(draw->dpy, draw->drawable, draw->gc, x, y, w, h);
+	if(!text || !draw->font)
+		return;
+	olen = strlen(text);
+	draw_getextents(draw, text, olen, &tex);
+	ty = y + (h / 2) - tex.yOff;
+	tx = x + tex.xOff;
+	/* shorten text if necessary */
+	for(len = MIN(olen, sizeof buf); len && tex.w > w - tex.h; len--)
+		draw_getextents(draw, text, len, &tex);
+	if(!len)
+		return;
+	memcpy(buf, text, len);
+	if(len < olen)
+		for(i = len; i && i > len - 3; buf[--i] = '.');
+	XSetForeground(draw->dpy, draw->gc, invert ? draw->bg->rgb : draw->fg->rgb);
+	if(draw->font->set)
+		XmbDrawString(draw->dpy, draw->drawable, draw->font->set, draw->gc, tx, ty, buf, len);
+	else
+		XDrawString(draw->dpy, draw->drawable, draw->gc, tx, ty, buf, len);
 }
 
 void
 draw_map(Draw *draw, int x, int y, unsigned int w, unsigned int h) {
 	if(!draw)
 		return;
-	/* TODO: map the draw contents in the region */
+	XCopyArea(draw->dpy, draw->drawable, draw->win, draw->gc, x, y, w, h, x, y);
+	XSync(draw->dpy, False);
 }
 
+
 void
-draw_getextents(Draw *draw, const char *text, TextExtents *extents) {
-	if(!draw || !extents)
+draw_getextents(Draw *draw, const char *text, unsigned int len, TextExtents *extents) {
+	XRectangle r;
+
+	if(!draw || !draw->font || !text)
 		return;
-	/* TODO: get extents */
+	if(draw->font->set) {
+		XmbTextExtents(draw->font->set, text, len, NULL, &r);
+		extents->xOff = r.x;
+		extents->yOff = r.y;
+		extents->w = r.width;
+		extents->h = r.height;
+	}
+	else {
+		extents->h = draw->font->ascent + draw->font->descent;
+		extents->w = XTextWidth(draw->font->xfont, text, len);
+		extents->xOff = extents->h / 2;
+		extents->yOff = (extents->h / 2) + draw->font->ascent;
+	}
 }
