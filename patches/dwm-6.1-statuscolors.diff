@@ -58,7 +58,7 @@ index e0edc72..cc451ab 100644
 -	unsigned long sel[ColLast];
 -	Drawable drawable;
 +	unsigned long colors[MAXCOLORS][ColLast];
-+ 	Drawable drawable;
++	Drawable drawable;
  	GC gc;
  	struct {
  		int ascent;
