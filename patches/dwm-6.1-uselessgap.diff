@@ -27,7 +27,6 @@ index 4a35df3..8414259 100644
  void
  resizeclient(Client *c, int x, int y, int w, int h) {
  	XWindowChanges wc;
-+	
 +	if(c->isfloating || selmon->lt[selmon->sellt]->arrange == NULL) { globalborder = 0; }
 +	else {
 +		if (selmon->lt[selmon->sellt]->arrange == monocle) { globalborder = 0 - borderpx; }
