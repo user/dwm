@@ -1,5 +1,5 @@
 diff --git a/config.def.h b/config.def.h
-index 8fd5d4a..272edcc 100644
+index 8fd5d4a..3f4a346 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -1,13 +1,20 @@
@@ -34,12 +34,12 @@ index 8fd5d4a..272edcc 100644
  
  /* commands */
 -static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-+static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],"-sb", colors[1][ColBG], "-sf", colors[8][ColFG], NULL };
+++static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],"-sb", colors[1][ColBG], "-sf", colors[8][ColFG], NULL };
  static const char *termcmd[]  = { "uxterm", NULL };
  
  static Key keys[] = {
 diff --git a/dwm.c b/dwm.c
-index e0edc72..65dc401 100644
+index e0edc72..cc451ab 100644
 --- a/dwm.c
 +++ b/dwm.c
 @@ -50,6 +50,7 @@
@@ -50,16 +50,18 @@ index e0edc72..65dc401 100644
  #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
  #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
  #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
-@@ -100,8 +101,7 @@ struct Client {
+@@ -100,9 +101,8 @@ struct Client {
  
  typedef struct {
  	int x, y, w, h;
 -	unsigned long norm[ColLast];
 -	unsigned long sel[ColLast];
+-	Drawable drawable;
 +	unsigned long colors[MAXCOLORS][ColLast];
- 	Drawable drawable;
++ 	Drawable drawable;
  	GC gc;
  	struct {
+ 		int ascent;
 @@ -182,8 +182,9 @@ static void detachstack(Client *c);
  static Monitor *dirtomon(int dir);
  static void drawbar(Monitor *m);
@@ -199,6 +201,15 @@ index e0edc72..65dc401 100644
  		setfocus(c);
  	}
  	else {
+@@ -1183,7 +1212,7 @@ manage(Window w, XWindowAttributes *wa) {
+ 
+ 	wc.border_width = c->bw;
+ 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
+-	XSetWindowBorder(dpy, w, dc.norm[ColBorder]);
++	XSetWindowBorder(dpy, w, dc.colors[0][ColBorder]);
+ 	configure(c); /* propagates border_width, if size doesn't change */
+ 	updatewindowtype(c);
+ 	updatesizehints(c);
 @@ -1666,12 +1695,11 @@ setup(void) {
  	cursor[CurResize] = XCreateFontCursor(dpy, XC_sizing);
  	cursor[CurMove] = XCreateFontCursor(dpy, XC_fleur);
