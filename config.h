@@ -81,7 +81,7 @@ static const char *mpcvoldowncmd[] = { "mpc", "volume", "-5", NULL };
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_x,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_grave,  spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -114,7 +114,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	/* custom */
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = stcmd } },
+	{ MODKEY,                       XK_grave,  spawn,          {.v = stcmd } },
 	{ False,                        XF86XK_HomePage,           spawn,          {.v = wwwcmd } },
 	{ False,                        XF86XK_AudioPlay,          spawn,          {.v = mpctogglecmd } },
 	{ False,                        XF86XK_AudioStop,          spawn,          {.v = mpcstopcmd } },
