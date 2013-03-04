@@ -37,7 +37,7 @@ static const Rule rules[] = {
 	{ "Pidgin",       NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Sonata",       NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Transmission", NULL,       NULL,       1 << 3,       True,        -1 },
-	{ "Xgrabcolor",   NULL,       NULL,       0,            True,        -1 },
+	{ "Zenity",       NULL,       NULL,       0,            True,        -1 },
 };
 
 /* layout(s) */
