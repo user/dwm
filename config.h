@@ -36,6 +36,7 @@ static const Rule rules[] = {
 	{ "Gimp",         NULL,       NULL,       0,            True,        -1 },
 	{ "Pidgin",       NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Sonata",       NULL,       NULL,       1 << 3,       True,        -1 },
+	{ "Steam",        NULL,       NULL,       0,            True,        -1 },
 	{ "Transmission", NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Zenity",       NULL,       NULL,       0,            True,        -1 },
 };
