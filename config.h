@@ -31,9 +31,9 @@ static const Rule rules[] = {
 	 * WM_NAME(STRING) = title
 	 */
 	/* class          instance    title       tags mask     isfloating   monitor */
-	{ "Chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
+	{ "Chromium",     NULL,       NULL,       1 << 4,       False,       -1 },
 	{ "Electrum",     NULL,       NULL,       0,            True,        -1 },
-	{ "Firefox",      NULL,       NULL,       1 << 4,       False,       -1 },
+	{ "Firefox",      NULL,       NULL,       1 << 1,       False,       -1 },
 	{ "Gimp",         NULL,       NULL,       0,            True,        -1 },
 	{ "Nemo",         NULL,       NULL,       0,            True,        -1 },
 	{ "Pidgin",       NULL,       NULL,       1 << 3,       True,        -1 },
@@ -70,7 +70,7 @@ static const Layout layouts[] = {
 static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[1][ColFG],"-sb", colors[0][ColBG], "-sf", colors[8][ColFG], NULL };
 static const char *termcmd[]  = { "sakura", "-c", "90", "-r", "30", NULL };
 static const char *stcmd[]    = { "st", NULL };
-static const char *wwwcmd[]   = { "chromium", NULL };
+static const char *wwwcmd[]   = { "firefox", NULL };
 static const char *mutecmd[]  = { "amixer", "set", "Master", "toggle", NULL };
 static const char *volupcmd[] = { "amixer", "set", "Master", "5%+", NULL };
 static const char *voldncmd[] = { "amixer", "set", "Master", "5%-", NULL };
