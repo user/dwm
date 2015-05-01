@@ -17,7 +17,7 @@ static const char colors[NUMCOLORS][ColLast][9] = {
 };
 
 static const char font[]            = "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*";
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 2;        /* gap pixel between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
