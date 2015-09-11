@@ -1,9 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 #include "gaplessgrid.c"
+#include <X11/XF86keysym.h>
 
 /* appearance */
 #define NUMCOLORS 9
-static const char colors[NUMCOLORS][ColLast][9] = {
+static const char colors[NUMCOLORS][MAXCOLORS][9] = {
 	/*  border   foreground  background  */
 	{ "#202020", "#a9a9a9", "#303030" },  /* x01 = darkgray  */
 	{ "#a9a9a9", "#d3d3d3", "#303030" },  /* x02 = lightgray */
@@ -72,9 +73,9 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][ColBG], "-nf", colors[1][ColFG],"-sb", colors[0][ColBG], "-sf", colors[8][ColFG], NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[8][1], NULL };
 static const char *termcmd[]       = { "st", NULL };
-static const char *urxvt[]         = { "urxvt", NULL };
+static const char *urxvtcmd[]      = { "urxvt", NULL };
 static const char *wwwcmd[]        = { "chromium", NULL };
 static const char *mutecmd[]       = { "amixer", "set", "Master", "toggle", NULL };
 static const char *volupcmd[]      = { "amixer", "set", "Master", "5%+", NULL };
@@ -89,6 +90,7 @@ static const char *mpcvoldowncmd[] = { "mpc", "volume", "-5", NULL };
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_x,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_grave,  spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = urxvtcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -126,7 +128,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	/* custom */
-	{ MODKEY,                       XK_grave,  spawn,          {.v = stcmd } },
 	{ False,                        XF86XK_HomePage,           spawn,          {.v = wwwcmd } },
 	{ False,                        XF86XK_AudioPlay,          spawn,          {.v = mpctogglecmd } },
 	{ False,                        XF86XK_AudioStop,          spawn,          {.v = mpcstopcmd } },
