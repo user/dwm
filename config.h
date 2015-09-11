@@ -1,4 +1,3 @@
-#include <X11/XF86keysym.h>
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
@@ -15,8 +14,10 @@ static const char colors[NUMCOLORS][ColLast][9] = {
 	{ "#202020", "#cc00cc", "#303030" },  /* x08 = magenta   */
 	{ "#202020", "#00b7eb", "#303030" },  /* x09 = cyan      */
 };
-
-static const char font[]            = "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*";
+static const char *fonts[] = {
+    "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*",
+};
+static const char dmenufont[] = "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 8;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
@@ -68,13 +69,14 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[1][ColFG],"-sb", colors[0][ColBG], "-sf", colors[8][ColFG], NULL };
-static const char *termcmd[]  = { "urxvt", NULL };
-static const char *stcmd[]    = { "st", NULL };
-static const char *wwwcmd[]   = { "chromium", NULL };
-static const char *mutecmd[]  = { "amixer", "set", "Master", "toggle", NULL };
-static const char *volupcmd[] = { "amixer", "set", "Master", "5%+", NULL };
-static const char *voldncmd[] = { "amixer", "set", "Master", "5%-", NULL };
+static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][ColBG], "-nf", colors[1][ColFG],"-sb", colors[0][ColBG], "-sf", colors[8][ColFG], NULL };
+static const char *termcmd[]       = { "st", NULL };
+static const char *urxvt[]         = { "urxvt", NULL };
+static const char *wwwcmd[]        = { "chromium", NULL };
+static const char *mutecmd[]       = { "amixer", "set", "Master", "toggle", NULL };
+static const char *volupcmd[]      = { "amixer", "set", "Master", "5%+", NULL };
+static const char *voldncmd[]      = { "amixer", "set", "Master", "5%-", NULL };
 static const char *mpctogglecmd[]  = { "mpc", "toggle", NULL };
 static const char *mpcstopcmd[]    = { "mpc", "stop", NULL };
 static const char *mpcprevcmd[]    = { "mpc", "prev", NULL };
@@ -85,7 +87,7 @@ static const char *mpcvoldowncmd[] = { "mpc", "volume", "-5", NULL };
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_x,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = urxvtcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
