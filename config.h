@@ -17,7 +17,8 @@ static const char colors[NUMCOLORS][MAXCOLORS][9] = {
 	{ "#202020", "#00b7eb", "#303030" },  /* x09 = cyan      */
 };
 static const char *fonts[] = {
-    "ohsnap.icons:size=14",
+	"ohsnap.icons:size=14:antialias=true:autohint=true",
+	"Ubuntu Mono:pixelsize=12:antialias=true:autohint=true",
 };
 static const char dmenufont[] = "ohsnap.icons:size=14";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
