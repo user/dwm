@@ -21,7 +21,7 @@ static const char *fonts[] = {
 };
 static const char dmenufont[] = "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gap pixel between windows */
+static const unsigned int gappx     = 6;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
@@ -99,8 +99,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.01} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.01} },
-	{ MODKEY|ShiftMask,             XK_j,      setcfact,       {.f = +0.01} },
-	{ MODKEY|ShiftMask,             XK_k,      setcfact,       {.f = -0.01} },
+	{ MODKEY|ShiftMask,             XK_j,      setcfact,       {.f = +0.020} },
+	{ MODKEY|ShiftMask,             XK_k,      setcfact,       {.f = -0.020} },
 	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
