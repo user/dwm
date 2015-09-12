@@ -17,7 +17,7 @@ static const char colors[NUMCOLORS][MAXCOLORS][9] = {
 	{ "#202020", "#00b7eb", "#303030" },  /* x09 = cyan      */
 };
 static const char *fonts[] = {
-    "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*",
+    "ohsnap.icons:size=14",
 };
 static const char dmenufont[] = "-*-ohsnap.icons-medium-r-normal-*-14-*-*-*-*-*-*-*";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -57,7 +57,7 @@ static const Layout layouts[] = {
 	{ "[t]",      tile },    /* first entry is default */
 	{ "[f]",      NULL },    /* no layout function means floating behavior */
 	{ "[m]",      monocle },
-	{ "###",      gaplessgrid },
+	{ "[#]",      gaplessgrid },
 };
 
 /* key definitions */
