@@ -22,7 +22,7 @@ static const char *fonts[] = {
 };
 static const char dmenufont[] = "ohsnap.icons:size=14";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int gappx     = 6;        /* gap pixel between windows */
+static const unsigned int gappx     = 32;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
