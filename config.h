@@ -3,26 +3,25 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-#define NUMCOLORS 9
-static const char colors[NUMCOLORS][MAXCOLORS][9] = {
+#define NUMCOLORS 8
+static const char colors[NUMCOLORS][MAXCOLORS][8] = {
 	/*  border   foreground  background  */
-	{ "#202020", "#a9a9a9", "#303030" },  /* x01 = darkgray  */
-	{ "#a9a9a9", "#d3d3d3", "#303030" },  /* x02 = lightgray */
-	{ "#202020", "#ff8c00", "#303030" },  /* x03 = orange    */
-	{ "#202020", "#ff0000", "#303030" },  /* x04 = red       */
-	{ "#202020", "#4cbb17", "#303030" },  /* x05 = green     */
-	{ "#202020", "#f4ca16", "#303030" },  /* x06 = yellow    */
-	{ "#202020", "#318ce7", "#303030" },  /* x07 = blue      */
-	{ "#202020", "#cc00cc", "#303030" },  /* x08 = magenta   */
-	{ "#202020", "#00b7eb", "#303030" },  /* x09 = cyan      */
+	{ "#3d3d3d", "#999999", "#303030" },  /* x01 = darkgray  */
+	{ "#999999", "#d0d0d0", "#303030" },  /* x02 = lightgray */
+	{ "#303030", "#e7940f", "#303030" },  /* x03 = yellow    */
+	{ "#303030", "#c23b2d", "#303030" },  /* x04 = red       */
+	{ "#303030", "#2aaf4d", "#303030" },  /* x05 = green     */
+	{ "#303030", "#2f97de", "#303030" },  /* x06 = blue      */
+	{ "#303030", "#9442b6", "#303030" },  /* x07 = magenta   */
+	{ "#303030", "#0ecca7", "#303030" },  /* x08 = cyan      */
 };
 static const char *fonts[] = {
 	"ohsnap.icons:size=14:antialias=true:autohint=true",
-	"Ubuntu Mono:pixelsize=12:antialias=true:autohint=true",
+	"Roboto Mono:pixelsize=11:antialias=true:autohint=true",
 };
 static const char dmenufont[] = "ohsnap.icons:size=14";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int gappx     = 32;        /* gap pixel between windows */
+static const unsigned int gappx     = 8;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
@@ -36,16 +35,12 @@ static const Rule rules[] = {
 	 * WM_NAME(STRING) = title
 	 */
 	/* class          instance    title       tags mask     isfloating   monitor */
-	{ "Chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
+	{ "chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
 	{ "Electrum",     NULL,       NULL,       0,            True,        -1 },
 	{ "Firefox",      NULL,       NULL,       1 << 4,       False,       -1 },
 	{ "Gimp",         NULL,       NULL,       0,            True,        -1 },
-	{ "Nemo",         NULL,       NULL,       0,            True,        -1 },
-	{ "Pidgin",       NULL,       NULL,       1 << 3,       True,        -1 },
-	{ "Sonata",       NULL,       NULL,       1 << 3,       True,        -1 },
 	{ "Steam",        NULL,       NULL,       0,            True,        -1 },
-	{ "Transmission", NULL,       NULL,       1 << 3,       True,        -1 },
-	{ "Zenity",       NULL,       NULL,       0,            True,        -1 },
+	{ "Transmission", NULL,       NULL,       1 << 3,       False,       -1 },
 };
 
 /* layout(s) */
@@ -74,7 +69,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[8][1], NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[5][1], NULL };
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
 static const char *urxvtcmd[]      = { "urxvt", NULL };
 static const char *wwwcmd[]        = { "chromium", NULL };
@@ -127,7 +122,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_p,      quit,           {0} },
 	/* custom */
 	{ False,                        XF86XK_HomePage,           spawn,          {.v = wwwcmd } },
 	{ False,                        XF86XK_AudioPlay,          spawn,          {.v = mpctogglecmd } },
