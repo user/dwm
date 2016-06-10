@@ -16,8 +16,8 @@ static const char colors[NUMCOLORS][MAXCOLORS][8] = {
 	{ "#303030", "#0ecca7", "#303030" },  /* x08 = cyan      */
 };
 static const char *fonts[] = {
-	"ohsnap.icons:size=14:antialias=true:autohint=false",
-	"Roboto Mono:pixelsize=11:antialias=true:autohint=false",
+	"ohsnap.icons:size=14:antialias=true:autohint=true",
+	"Roboto Mono:pixelsize=11:antialias=true:autohint=true",
 };
 static const char dmenufont[] = "ohsnap.icons:size=14";
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -71,7 +71,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[5][1], NULL };
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
-static const char *urxvtcmd[]      = { "urxvt", "-geometry", "140x35+550+350", NULL };
+static const char *urxvtcmd[]      = { "urxvt", NULL };
 static const char *wwwcmd[]        = { "chromium", NULL };
 static const char *mutecmd[]       = { "amixer", "set", "Master", "toggle", NULL };
 static const char *volupcmd[]      = { "amixer", "set", "Master", "5%+", NULL };
@@ -82,8 +82,6 @@ static const char *mpcprevcmd[]    = { "mpc", "prev", NULL };
 static const char *mpcnextcmd[]    = { "mpc", "next", NULL };
 static const char *mpcvolupcmd[]   = { "mpc", "volume", "+5", NULL };
 static const char *mpcvoldowncmd[] = { "mpc", "volume", "-5", NULL };
-static const char *mpcvoloncmd[]   = { "mpc", "volume", "100", NULL };
-static const char *mpcvoloffcmd[]  = { "mpc", "volume", "0", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -133,8 +131,6 @@ static Key keys[] = {
 	{ False,                        XF86XK_AudioNext,          spawn,          {.v = mpcnextcmd } },
 	{ MODKEY,                       XK_KP_Add,                 spawn,          {.v = mpcvolupcmd } },
 	{ MODKEY,                       XK_KP_Subtract,            spawn,          {.v = mpcvoldowncmd  } },
-	{ MODKEY,                       XK_KP_Multiply,            spawn,          {.v = mpcvoloncmd  } },
-	{ MODKEY,                       XK_KP_Divide,              spawn,          {.v = mpcvoloffcmd  } },
 	{ False,                        XF86XK_AudioMute,          spawn,          {.v = mutecmd  } },
 	{ False,                        XF86XK_AudioRaiseVolume,   spawn,          {.v = volupcmd  } },
 	{ False,                        XF86XK_AudioLowerVolume,   spawn,          {.v = voldncmd  } },
