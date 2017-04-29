@@ -16,18 +16,17 @@ static const char colors[NUMCOLORS][MAXCOLORS][8] = {
 	{ "#303030", "#0ecca7", "#303030" },  /* x08 = cyan      */
 };
 static const char *fonts[] = {
-	"ohsnap.icons:size=14:antialias=true:autohint=false",
-	"Roboto Mono:pixelsize=11:antialias=true:autohint=false",
+	"xos4 terminus:pixelsize=13",
 };
-static const char dmenufont[] = "ohsnap.icons:size=14";
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const char dmenufont[] = "xos4 terminus:pixelsize=13";
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 8;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
 
 /* tagging */
-static const char *tags[] = { "main", "web", "dev", "media", "temp" };
+static const char *tags[] = { "main", "web", "dev", "steam", "temp" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -35,16 +34,14 @@ static const Rule rules[] = {
 	 * WM_NAME(STRING) = title
 	 */
 	/* class          instance    title       tags mask     isfloating   monitor */
-	{ "chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
-	{ "Electrum",     NULL,       NULL,       0,            True,        -1 },
+	{ "Chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
 	{ "Firefox",      NULL,       NULL,       1 << 4,       False,       -1 },
 	{ "Gimp",         NULL,       NULL,       0,            True,        -1 },
-	{ "Steam",        NULL,       NULL,       0,            True,        -1 },
-	{ "Transmission", NULL,       NULL,       1 << 3,       False,       -1 },
+	{ "Steam",        NULL,       NULL,       1 << 3,       True,        -1 },
 };
 
 /* layout(s) */
-static const float mfact      = 0.60; /* factor of master area size [0.05..0.95] */
+static const float mfact      = 0.70; /* factor of master area size [0.05..0.95] */
 static const int nmaster      = 1;    /* number of clients in master area */
 static const Bool resizehints = False; /* True means respect size hints in tiled resizals */
 
@@ -53,7 +50,8 @@ static const Layout layouts[] = {
 	{ "[t]",      tile },    /* first entry is default */
 	{ "[f]",      NULL },    /* no layout function means floating behavior */
 	{ "[m]",      monocle },
-	{ "[#]",      gaplessgrid },
+	{ "[g]",      gaplessgrid },
+	{ "[c]",      col },
 };
 
 /* key definitions */
@@ -69,7 +67,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[5][1], NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[4][1], NULL };
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
 static const char *urxvtcmd[]      = { "urxvt", "-geometry", "140x35+550+350", NULL };
 static const char *wwwcmd[]        = { "chromium", NULL };
@@ -84,6 +82,10 @@ static const char *mpcvolupcmd[]   = { "mpc", "volume", "+5", NULL };
 static const char *mpcvoldowncmd[] = { "mpc", "volume", "-5", NULL };
 static const char *mpcvoloncmd[]   = { "mpc", "volume", "100", NULL };
 static const char *mpcvoloffcmd[]  = { "mpc", "volume", "0", NULL };
+static const char *rotateicmd[]    = { "xrandr", "--output", "DVI-I-1", "--rotate", "inverted", NULL };
+static const char *rotatencmd[]    = { "xrandr", "--output", "DVI-I-1", "--rotate", "normal", NULL };
+static const char *rotatelcmd[]    = { "xrandr", "--output", "DVI-I-1", "--rotate", "left", NULL };
+static const char *rotatercmd[]    = { "xrandr", "--output", "DVI-I-1", "--rotate", "right", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -107,6 +109,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
@@ -132,12 +135,16 @@ static Key keys[] = {
 	{ False,                        XF86XK_AudioPrev,          spawn,          {.v = mpcprevcmd } },
 	{ False,                        XF86XK_AudioNext,          spawn,          {.v = mpcnextcmd } },
 	{ MODKEY,                       XK_KP_Add,                 spawn,          {.v = mpcvolupcmd } },
-	{ MODKEY,                       XK_KP_Subtract,            spawn,          {.v = mpcvoldowncmd  } },
-	{ MODKEY,                       XK_KP_Multiply,            spawn,          {.v = mpcvoloncmd  } },
-	{ MODKEY,                       XK_KP_Divide,              spawn,          {.v = mpcvoloffcmd  } },
-	{ False,                        XF86XK_AudioMute,          spawn,          {.v = mutecmd  } },
-	{ False,                        XF86XK_AudioRaiseVolume,   spawn,          {.v = volupcmd  } },
-	{ False,                        XF86XK_AudioLowerVolume,   spawn,          {.v = voldncmd  } },
+	{ MODKEY,                       XK_KP_Subtract,            spawn,          {.v = mpcvoldowncmd } },
+	{ MODKEY,                       XK_KP_Multiply,            spawn,          {.v = mpcvoloncmd } },
+	{ MODKEY,                       XK_KP_Divide,              spawn,          {.v = mpcvoloffcmd } },
+	{ False,                        XF86XK_AudioMute,          spawn,          {.v = mutecmd } },
+	{ False,                        XF86XK_AudioRaiseVolume,   spawn,          {.v = volupcmd } },
+	{ False,                        XF86XK_AudioLowerVolume,   spawn,          {.v = voldncmd } },
+	{ MODKEY,                       XK_Up,                     spawn,          {.v = rotateicmd } },
+	{ MODKEY,                       XK_Down,                   spawn,          {.v = rotatencmd } },
+	{ MODKEY,                       XK_Left,                   spawn,          {.v = rotatelcmd } },
+	{ MODKEY,                       XK_Right,                  spawn,          {.v = rotatercmd } },
 };
 
 /* button definitions */
