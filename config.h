@@ -1,37 +1,31 @@
 /* See LICENSE file for copyright and license details. */
-#include "gaplessgrid.c"
 #include <X11/XF86keysym.h>
 
 /* appearance */
-#define NUMCOLORS 8
-static const char colors[NUMCOLORS][MAXCOLORS][8] = {
-	/*  border   foreground  background  */
-	{ "#3d3d3d", "#999999", "#303030" },  /* x01 = darkgray  */
-	{ "#999999", "#d0d0d0", "#303030" },  /* x02 = lightgray */
-	{ "#303030", "#e7940f", "#303030" },  /* x03 = yellow    */
-	{ "#303030", "#c23b2d", "#303030" },  /* x04 = red       */
-	{ "#303030", "#2aaf4d", "#303030" },  /* x05 = green     */
-	{ "#303030", "#2f97de", "#303030" },  /* x06 = blue      */
-	{ "#303030", "#9442b6", "#303030" },  /* x07 = magenta   */
-	{ "#303030", "#0ecca7", "#303030" },  /* x08 = cyan      */
-};
-static const char *fonts[] = {
-	"xos4 terminus:pixelsize=13",
-};
-static const char dmenufont[] = "xos4 terminus:pixelsize=13";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
-static const Bool showbar           = True;     /* False means no bar */
-static const Bool topbar            = True;     /* False means bottom bar */
+static const int showbar            = 1;        /* 0 means no bar */
+static const int topbar             = 1;        /* 0 means bottom bar */
+static const char *fonts[]          = { "xos4 terminus:size=12" };
+static const char dmenufont[]       = "xos4 terminus:size=12";
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#bbbbbb";
+static const char col_gray4[]       = "#eeeeee";
+static const char col_cyan[]        = "#005577";
+static const char *colors[][3]      = {
+	/*               fg         bg         border   */
+	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+};
 
 /* tagging */
 static const char *tags[] = { "main", "web", "dev", "steam", "temp" };
 
 static const Rule rules[] = {
 	/* xprop(1):
-	 * WM_CLASS(STRING) = instance, class
-	 * WM_NAME(STRING) = title
+	 *	WM_CLASS(STRING) = instance, class
+	 *	WM_NAME(STRING) = title
 	 */
 	/* class          instance    title       tags mask     isfloating   monitor */
 	{ "Chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
@@ -41,9 +35,9 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact      = 0.70; /* factor of master area size [0.05..0.95] */
-static const int nmaster      = 1;    /* number of clients in master area */
-static const Bool resizehints = False; /* True means respect size hints in tiled resizals */
+static const float mfact     = 0.70; /* factor of master area size [0.05..0.95] */
+static const int nmaster     = 1;    /* number of clients in master area */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -67,7 +61,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", colors[0][2], "-nf", colors[1][1], "-sb", colors[0][2], "-sf", colors[4][1], NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
 static const char *urxvtcmd[]      = { "urxvt", "-geometry", "140x35+550+350", NULL };
 static const char *wwwcmd[]        = { "chromium", NULL };
