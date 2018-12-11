@@ -12,11 +12,18 @@ static const char dmenufont[]       = "misc ohsnap.icons:size=11";
 static const char col_bg[]          = "#303030";
 static const char col_dgray[]       = "#a9a9a9";
 static const char col_gray[]        = "#d3d3d3";
-static const char col_green[]       = "#30d052";
+static const char col_red[]         = "#ff0000";
+static const char col_green[]       = "#4cbb17";
+static const char col_blue[]        = "#1e90ff";
+static const char col_magenta[]     = "#d0417e";
+static const char col_cyan[]        = "#87cefa";
+static const char col_yellow[]      = "#fbec5d";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_dgray,  col_bg,  col_bg,    },
-	[SchemeSel]  = { col_gray,   col_bg,  col_dgray, },
+	[SchemeNorm]   = { col_dgray,  col_bg,  col_bg    },
+	[SchemeSel]    = { col_gray,   col_bg,  col_dgray },
+	[SchemeWarn]   = { col_yellow, col_bg,  col_bg    },
+	[SchemeUrgent] = { col_red,    col_bg,  col_bg    },
 };
 
 /* tagging */
@@ -44,8 +51,8 @@ static const Layout layouts[] = {
 	{ "[t]",      tile },    /* first entry is default */
 	{ "[f]",      NULL },    /* no layout function means floating behavior */
 	{ "[m]",      monocle },
-	{ "[g]",      gaplessgrid },
 	{ "[c]",      col },
+	{ "[g]",      gaplessgrid },
 };
 
 /* key definitions */
@@ -102,8 +109,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
