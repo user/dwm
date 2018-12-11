@@ -7,8 +7,8 @@ static const unsigned int gappx     = 8;        /* gap pixel between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "xos4 terminus:size=9" };
-static const char dmenufont[]       = "xos4 terminus:size=9";
+static const char *fonts[]          = { "misc ohsnap.icons:size=11", "xos4 terminus:size=9:lang=ru" };
+static const char dmenufont[]       = "misc ohsnap.icons:size=11";
 static const char col_bg[]          = "#303030";
 static const char col_dgray[]       = "#a9a9a9";
 static const char col_gray[]        = "#d3d3d3";
@@ -63,7 +63,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_dgray, "-sb", col_bg, "-sf", col_green, NULL };
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
-static const char *urxvtcmd[]      = { "urxvt", "-geometry", "140x35+550+350", NULL };
+static const char *stcmd[]         = { "st", "-g", "125x30+550+300", "-f", "Ubuntu Mono:size=11", NULL };
 static const char *wwwcmd[]        = { "chromium", NULL };
 static const char *mutecmd[]       = { "amixer", "-q", "set", "Master", "toggle", NULL };
 static const char *volupcmd[]      = { "amixer", "-q", "set", "Master", "5%+", NULL };
@@ -84,8 +84,8 @@ static const char *rotatercmd[]    = { "xrandr", "--output", "DVI-I-1", "--rotat
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_x,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_grave,  spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = urxvtcmd } },
+	{ MODKEY,                       XK_grave,  spawn,          {.v = stcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
