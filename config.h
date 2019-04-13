@@ -2,28 +2,36 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gap pixel between windows */
-static const unsigned int snap      = 16;       /* snap pixel */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int gappx     = 4;        /* gap pixel between windows */
+static const unsigned int snap      = 8;        /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "misc ohsnap.icons:size=11", "xos4 terminus:size=9:lang=ru" };
-static const char dmenufont[]       = "misc ohsnap.icons:size=11";
-static const char col_bg[]          = "#303030";
-static const char col_dgray[]       = "#a9a9a9";
-static const char col_gray[]        = "#d3d3d3";
-static const char col_red[]         = "#ff0000";
-static const char col_green[]       = "#4cbb17";
-static const char col_blue[]        = "#1e90ff";
-static const char col_magenta[]     = "#d0417e";
-static const char col_cyan[]        = "#87cefa";
-static const char col_yellow[]      = "#fbec5d";
+static const char *fonts[]          = { "xos4 terminus:size=9:lang=ru", "Wuncon Siji:style=Regular:size=9" };
+static const char dmenufont[]       = "xos4 terminus:size=9:lang=ru";
+
+static const char color00[] = "#303030";  // black
+static const char color01[] = "#c23b2d";  // red
+static const char color02[] = "#2aaf4d";  // green
+static const char color03[] = "#e7940f";  // yellow
+static const char color04[] = "#207ab5";  // blue
+static const char color05[] = "#9442b6";  // magenta
+static const char color06[] = "#12a689";  // cyan
+static const char color07[] = "#a9a9a9";  // white
+static const char color08[] = "#4d4d4d";  // black b
+static const char color09[] = "#ec4c3c";  // red b
+static const char color10[] = "#30d052";  // green b
+static const char color11[] = "#f3c714";  // yellow b
+static const char color12[] = "#2f97de";  // blue b
+static const char color13[] = "#a75ec5";  // magenta b
+static const char color14[] = "#0ecca7";  // cyan b
+static const char color15[] = "#d3d3d3";  // white b
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm]   = { col_dgray,  col_bg,  col_bg    },
-	[SchemeSel]    = { col_gray,   col_bg,  col_dgray },
-	[SchemeWarn]   = { col_yellow, col_bg,  col_bg    },
-	[SchemeUrgent] = { col_red,    col_bg,  col_bg    },
+	/*                 fg        bg        border   */
+	[SchemeNorm]   = { color07,  color00,  color00 },
+	[SchemeSel]    = { color15,  color00,  color08 },
+	[SchemeWarn]   = { color03,  color00,  color00 },
+	[SchemeUrgent] = { color05,  color00,  color00 },
 };
 
 /* tagging */
@@ -34,11 +42,10 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class          instance    title       tags mask     isfloating   monitor */
-	{ "Chromium",     NULL,       NULL,       1 << 1,       False,       -1 },
-	{ "Firefox",      NULL,       NULL,       1 << 4,       False,       -1 },
-	{ "Gimp",         NULL,       NULL,       0,            True,        -1 },
-	{ "Steam",        NULL,       NULL,       1 << 3,       True,        -1 },
+	/* class            instance    title       tags mask     isfloating   monitor */
+	{ "Google-chrome",  NULL,       NULL,       1 << 1,       False,       -1 },
+	{ "Firefox",        NULL,       NULL,       1 << 4,       False,       -1 },
+	{ "Steam",          NULL,       NULL,       1 << 3,       True,        -1 },
 };
 
 /* layout(s) */
@@ -68,10 +75,11 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_dgray, "-sb", col_bg, "-sf", col_green, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", color00, "-nf", color07, "-sb", color00, "-sf", color02, NULL };
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
-static const char *stcmd[]         = { "st", "-g", "125x30+550+300", "-f", "Ubuntu Mono:size=11", NULL };
-static const char *wwwcmd[]        = { "chromium", NULL };
+//static const char *stcmd[]         = { "st", "-g", "125x30+550+300", "-f", "Ubuntu Mono:size=11", NULL };
+static const char *stcmd[]         = { "st", "-g", "125x30+270+200", "-f", "Ubuntu Mono:size=11", NULL };
+static const char *wwwcmd[]        = { "google-chrome", NULL };
 static const char *mutecmd[]       = { "amixer", "-q", "set", "Master", "toggle", NULL };
 static const char *volupcmd[]      = { "amixer", "-q", "set", "Master", "5%+", NULL };
 static const char *voldncmd[]      = { "amixer", "-q", "set", "Master", "5%-", NULL };
@@ -119,6 +127,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
