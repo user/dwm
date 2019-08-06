@@ -3,12 +3,16 @@
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int gappx     = 4;        /* gap pixel between windows */
 static const unsigned int snap      = 8;        /* snap pixel */
+static const unsigned int gappih    = 4;        /* horiz inner gap between windows */
+static const unsigned int gappiv    = 4;        /* vert inner gap between windows */
+static const unsigned int gappoh    = 4;        /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 4;        /* vert outer gap between windows and screen edge */
+static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "xos4 terminus:size=9:lang=ru", "Wuncon Siji:style=Regular:size=9" };
-static const char dmenufont[]       = "xos4 terminus:size=9:lang=ru";
+static const char *fonts[]          = { "terminus:size=9:lang=ru", "Wuncon Siji:style=Regular:size=9" };
+static const char dmenufont[]       = "terminus:size=9:lang=ru";
 
 static const char color00[] = "#303030";  // black
 static const char color01[] = "#c23b2d";  // red
@@ -35,17 +39,19 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "main", "web", "dev", "steam", "temp" };
+static const char *tags[] = { "misc", "web", "dev", "steam", "msg", "temp" };
 
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class            instance    title       tags mask     isfloating   monitor */
-	{ "Google-chrome",  NULL,       NULL,       1 << 1,       False,       -1 },
-	{ "Firefox",        NULL,       NULL,       1 << 4,       False,       -1 },
-	{ "Steam",          NULL,       NULL,       1 << 3,       True,        -1 },
+	/* class           instance    title       tags mask     isfloating   monitor */
+	{ "Google-chrome", NULL,       NULL,       1 << 1,       False,       -1 },
+	{ "Steam",         NULL,       NULL,       1 << 3,       True,        -1 },
+	{ NULL,            NULL,       "Steam",    1 << 3,       True,        -1 },
+	{ "Telegram",      NULL,       NULL,       1 << 4,       False,       -1 },
+	{ "Firefox",       NULL,       NULL,       1 << 5,       False,       -1 },
 };
 
 /* layout(s) */
@@ -79,16 +85,16 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]       = { "st", "-g", "140x35+550+350", NULL };
 //static const char *stcmd[]         = { "st", "-g", "125x30+550+300", "-f", "Ubuntu Mono:size=11", NULL };
 static const char *stcmd[]         = { "st", "-g", "125x30+270+200", "-f", "Ubuntu Mono:size=11", NULL };
-static const char *wwwcmd[]        = { "google-chrome", NULL };
+static const char *wwwcmd[]        = { "google-chrome-stable", NULL };
 static const char *mutecmd[]       = { "amixer", "-q", "set", "Master", "toggle", NULL };
-static const char *volupcmd[]      = { "amixer", "-q", "set", "Master", "5%+", NULL };
-static const char *voldncmd[]      = { "amixer", "-q", "set", "Master", "5%-", NULL };
+static const char *volupcmd[]      = { "amixer", "-q", "set", "Master", "2%+", NULL };
+static const char *voldncmd[]      = { "amixer", "-q", "set", "Master", "2%-", NULL };
 static const char *mpctogglecmd[]  = { "mpc", "-q", "toggle", NULL };
 static const char *mpcstopcmd[]    = { "mpc", "-q", "stop", NULL };
 static const char *mpcprevcmd[]    = { "mpc", "-q", "prev", NULL };
 static const char *mpcnextcmd[]    = { "mpc", "-q", "next", NULL };
-static const char *mpcvolupcmd[]   = { "mpc", "-q", "volume", "+5", NULL };
-static const char *mpcvoldowncmd[] = { "mpc", "-q", "volume", "-5", NULL };
+static const char *mpcvolupcmd[]   = { "mpc", "-q", "volume", "+2", NULL };
+static const char *mpcvoldowncmd[] = { "mpc", "-q", "volume", "-2", NULL };
 static const char *mpcvoloncmd[]   = { "mpc", "-q", "volume", "100", NULL };
 static const char *mpcvoloffcmd[]  = { "mpc", "-q", "volume", "0", NULL };
 static const char *rotateicmd[]    = { "xrandr", "--output", "DVI-I-1", "--rotate", "inverted", NULL };
@@ -118,15 +124,28 @@ static Key keys[] = {
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+	//{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+	//{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
+	{ MODKEY|ShiftMask,             XK_h,      incrgaps,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_l,      incrgaps,       {.i = -1 } },
+	{ MODKEY|ShiftMask|ControlMask, XK_h,      incrogaps,      {.i = +1 } },
+	{ MODKEY|ShiftMask|ControlMask, XK_l,      incrogaps,      {.i = -1 } },
+	{ MODKEY|ShiftMask|Mod1Mask,    XK_h,      incrigaps,      {.i = +1 } },
+	{ MODKEY|ShiftMask|Mod1Mask,    XK_l,      incrigaps,      {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_0,      togglegaps,     {0} },
+	{ MODKEY|ShiftMask|ControlMask, XK_0,      defaultgaps,    {0} },
+	{ MODKEY,                       XK_y,      incrihgaps,     {.i = +1 } },
+	{ MODKEY,                       XK_o,      incrihgaps,     {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_y,      incrivgaps,     {.i = +1 } },
+	{ MODKEY|Mod1Mask,              XK_o,      incrivgaps,     {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_y,      incrohgaps,     {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_o,      incrohgaps,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_y,      incrovgaps,     {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_o,      incrovgaps,     {.i = -1 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
